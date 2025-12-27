@@ -16,7 +16,7 @@ Analyzed 188,000+ Spotify tracks to determine optimal album sequencing, then bui
 
 **Chatbot:** React, JavaScript, Tailwind CSS
 
-## 📁 Files
+## Files
 
 - `final-jupyter-notebook.ipynb` - Complete statistical analysis
 - `post-release-optimizer-DEMO-FINAL.html` - Interactive AI chatbot (open in browser)
