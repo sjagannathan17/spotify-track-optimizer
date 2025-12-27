@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post-Release Optimizer - Demo Version</title>
+    <meta name="author" content="Srinidhi Jagannathan">
+    <meta name="description" content="AI-Powered Track Strategy Advisor for Music Albums">
+    <!--
+    ═══════════════════════════════════════════════════════════════
+    PROJECT: Post-Release Optimizer
+    DESCRIPTION: AI Chatbot for Album Track Strategy Optimization
+    TEAM MEMBER RESPONSIBLE: Srinidhi Jagannathan
+    INSTITUTION: Santa Clara University - MSBA Program
+    DATE: December 2024
+    
+    TECHNOLOGY STACK:
+    - React 18 (UI Framework)
+    - Tailwind CSS (Styling)
+    - JavaScript ES6+ (Logic)
+    - Claude AI Integration (AI Responses)
+    
+    RESEARCH FOUNDATION:
+    - H1: Three-Track Gateway Hypothesis
+    - H2: Genre-Specific Strategies
+    - H3: Artist Tier Differential
+    ═══════════════════════════════════════════════════════════════
+    -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+        }
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useRef, useEffect } = React;
+
+        // Icons
+        const Music = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M9 18V5l12-2v13"></path>
+                <circle cx="6" cy="18" r="3"></circle>
+                <circle cx="18" cy="16" r="3"></circle>
+            </svg>
+        );
+
+        const Send = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <line x1="22" y1="2" x2="11" y2="13"></line>
+                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+            </svg>
+        );
+
+        const TrendingUp = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+                <polyline points="17 6 23 6 23 12"></polyline>
+            </svg>
+        );
+
+        const Users = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+        );
+
+        const Zap = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+        );
+
+        const Sparkles = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"></path>
+                <path d="M5 3v4"></path>
+                <path d="M19 17v4"></path>
+                <path d="M3 5h4"></path>
+                <path d="M17 19h4"></path>
+            </svg>
+        );
+
+        const Loader2 = ({ size = 24, className = "" }) => (
+            <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
+                <path d="M21 12a9 9 0 1 1-6.219-8.56"></path>
+            </svg>
+        );
+
+        const PostReleaseOptimizer = () => {
+            const [messages, setMessages] = useState([
+                {
+                    role: 'assistant',
+                    content: '🎵 Welcome to the **Post-Release Optimizer**! I\'m your AI advisor powered by data-driven insights from analyzing thousands of Spotify albums.\n\nI can help you optimize your track strategy based on:\n• **H1: Three-Track Gateway** - Finding the sweet spot in quality gaps\n• **H2: Genre-Specific Strategies** - Tailored advice for Pop, Rock, and more\n• **H3: Artist Tier Differential** - Personalized guidance based on your follower count\n\nTo get started, select up to 3 tracks and click a Quick Start button below!'
+                }
+            ]);
+            const [input, setInput] = useState('');
+            const [isLoading, setIsLoading] = useState(false);
+            const [selectedTracks, setSelectedTracks] = useState([]);
+            const [showTrackSelector, setShowTrackSelector] = useState(false);
+            const messagesEndRef = useRef(null);
+
+            const scrollToBottom = () => {
+                messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+            };
+
+            useEffect(() => {
+                scrollToBottom();
+            }, [messages]);
+
+            const sampleTracks = [
+                { id: 1, name: 'Summer of \'69', popularity: 85, position: 1 },
+                { id: 2, name: 'Heaven', popularity: 82, position: 2 },
+                { id: 3, name: 'Run To You', popularity: 55, position: 3 },
+                { id: 4, name: 'Somebody', popularity: 60, position: 5 },
+                { id: 5, name: 'Kids Wanna Rock', popularity: 50, position: 8 },
+            ];
+
+            // Mock responses based on prompt type
+            const getMockResponse = (promptType, tracks) => {
+                if (promptType === 'analyze' && tracks.length > 0) {
+                    const highestPop = Math.max(...tracks.map(t => t.popularity));
+                    const lowestPop = Math.min(...tracks.map(t => t.popularity));
+                    const gap = highestPop - lowestPop;
+                    
+                    return `🎵 **Track Strategy Analysis**
+
+I've analyzed your selected tracks from Bryan Adams' album. Here's what the data shows:
+
+**Quality Gap Analysis (H1):**
+Your tracks show a ${gap}-point gap between the highest (${highestPop}) and lowest (${lowestPop}) popularity tracks. ${gap > 25 ? '⚠️ This gap is quite large (>25 points), which could signal excessive front-loading.' : gap > 15 ? '✅ This falls within the optimal 10-20 point range!' : 'The gap is relatively small.'} 
+
+According to our research, albums with moderate gaps (10-20 points) achieve approximately **+18 points** in overall album popularity. Extreme gaps (>30 points) are actually penalized because listeners feel the quality drop-off too sharply.
+
+**Recommendations:**
+1. ${gap > 25 ? 'Consider reordering to distribute strong tracks more evenly throughout the album' : 'Your current arrangement follows the optimal pattern'}
+2. Maintain consistent production quality across all tracks
+3. Use your strongest tracks strategically to maintain listener engagement
+
+The key is finding the Goldilocks zone - not too much variation, not too little!`;
+                }
+
+                if (promptType === 'analyze') {
+                    return `🎵 **Track Strategy Analysis**
+
+Based on the typical patterns we see in successful albums:
+
+**Quality Gap Analysis (H1):**
+For optimal album performance, aim for a **moderate quality gap** of 10-20 popularity points between your first 3 tracks and the rest of the album. This creates enough hook to draw listeners in without making them feel deceived.
+
+Our research shows albums with this moderate gap achieve **+18 points** higher album popularity compared to those with extreme gaps (>30 points) or minimal variation.
+
+**Key Insight:** The "inverted-U" relationship means you want balance - strong opening tracks, but don't make the rest of the album feel like filler!`;
+                }
+
+                if (promptType === 'genre') {
+                    return `🎸 **Genre-Specific Strategy (H2)**
+
+Great question! Genre makes a HUGE difference in track placement strategy.
+
+**For Rock Albums:**
+Research shows Rock albums get **NO significant benefit** from front-loading best tracks. Why? Rock listeners tend to play albums front-to-back and value album cohesion. They're less likely to skip around.
+
+**Strategy for Rock:** Spread your quality evenly throughout the album. Think album as a complete artistic statement.
+
+**For Pop Albums (by contrast):**
+Pop artists get a **+22 point boost** from front-loading! Pop listeners browse, skip, and playlist-build, so hooks up front are critical.
+
+**Bryan Adams (Rock):** Given his Rock roots, an even distribution of quality tracks would serve the album better than extreme front-loading. His fanbase expects album-oriented listening experiences.
+
+**Bottom line:** One size does NOT fit all. Your genre dictates your strategy! 🎯`;
+                }
+
+                if (promptType === 'artist') {
+                    return `👥 **Artist Tier Strategy (H3)**
+
+Your follower count dramatically changes what matters most!
+
+**For Emerging Artists (<500K followers):**
+⚡ Your **first track predicts 31%** of album success - it's CRITICAL! You often get one shot to hook new listeners. That opening track needs to be your absolute best, most accessible song.
+
+**For Mid-Tier Artists (500K-5M followers):**
+📊 Balanced approach works best. First track predicts around 18-20% of success. You have some established fanbase but still need strong hooks.
+
+**For Superstar Artists (>5M followers):**
+🌟 First track only predicts **8%** of album success. Why? They have loyal fanbases who'll listen to everything regardless. They can take more artistic risks.
+
+**Key Takeaway:** 
+New artists: Front-load and make that first track COUNT!
+Superstars: You've earned the freedom to experiment.
+
+The variance explained (R²) shows emerging artists at 66.9%, mid-tier at 67.7%, and superstars at 80.4% - meaning superstars have more consistent success regardless of track order. 🚀`;
+                }
+
+                return `Thank you for your question! I analyze album strategies based on three key hypotheses from Spotify data. Try selecting some tracks and using the Quick Start buttons for specific insights!`;
+            };
+
+            const toggleTrack = (track) => {
+                if (selectedTracks.find(t => t.id === track.id)) {
+                    setSelectedTracks(selectedTracks.filter(t => t.id !== track.id));
+                } else if (selectedTracks.length < 3) {
+                    setSelectedTracks([...selectedTracks, track]);
+                }
+            };
+
+            const handleSendMessage = async (promptType = 'general') => {
+                if (!input.trim() && selectedTracks.length === 0 && promptType === 'general') return;
+
+                let userMessage = '';
+                
+                if (promptType === 'analyze') {
+                    userMessage = selectedTracks.length > 0 
+                        ? "I'm analyzing Bryan Adams' album. Are these tracks optimally arranged for album success?"
+                        : "I'm a Pop artist with 250K followers. My first 3 tracks have avg popularity of 65, and tracks 4+ average 40. How should I optimize?";
+                } else if (promptType === 'artist') {
+                    userMessage = "I'm an emerging artist with 100K followers. What should my release strategy focus on?";
+                } else if (promptType === 'genre') {
+                    userMessage = "I make Rock music. Should I front-load my best tracks or spread them evenly?";
+                } else {
+                    userMessage = input.trim();
+                }
+                
+                if (selectedTracks.length > 0 && promptType === 'analyze') {
+                    const trackInfo = selectedTracks.map(t => 
+                        `Track ${t.position}: "${t.name}" (Popularity: ${t.popularity})`
+                    ).join(', ');
+                    userMessage += `\n\nSelected Tracks: ${trackInfo}`;
+                }
+
+                const newUserMessage = { role: 'user', content: userMessage };
+                setMessages(prev => [...prev, newUserMessage]);
+                setInput('');
+                setShowTrackSelector(false);
+                setIsLoading(true);
+
+                // Simulate AI thinking time
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                const mockResponse = getMockResponse(promptType, selectedTracks);
+                const assistantMessage = {
+                    role: 'assistant',
+                    content: mockResponse
+                };
+
+                setMessages(prev => [...prev, assistantMessage]);
+                setSelectedTracks([]);
+                setIsLoading(false);
+            };
+
+            const handleKeyPress = (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    handleSendMessage('general');
+                }
+            };
+
+            const quickPrompts = [
+                { 
+                    icon: TrendingUp, 
+                    text: "Analyze my track strategy", 
+                    type: "analyze"
+                },
+                { 
+                    icon: Users, 
+                    text: "Artist tier advice", 
+                    type: "artist"
+                },
+                { 
+                    icon: Zap, 
+                    text: "Genre-specific tips", 
+                    type: "genre"
+                },
+            ];
+
+            return (
+                <div className="min-h-screen bg-black text-white flex flex-col">
+                    {/* Header */}
+                    <div className="bg-gradient-to-r from-green-500 to-green-600 p-6 shadow-lg">
+                        <div className="max-w-5xl mx-auto flex items-center gap-4">
+                            <div className="bg-white rounded-full p-3">
+                                <Music className="text-green-600" size={32} />
+                            </div>
+                            <div>
+                                <h1 className="text-3xl font-bold">Post-Release Optimizer</h1>
+                                <p className="text-green-100 text-sm">AI-Powered Track Strategy Advisor</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Info Bar */}
+                    <div className="bg-gray-900 border-b border-gray-800 py-3">
+                        <div className="max-w-5xl mx-auto px-6 flex gap-6 text-xs flex-wrap">
+                            <div className="flex items-center gap-2">
+                                <Sparkles size={16} className="text-yellow-400" />
+                                <span className="text-gray-300">H1: Three-Track Gateway</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <TrendingUp size={16} className="text-blue-400" />
+                                <span className="text-gray-300">H2: Genre Strategies</span>
+                            </div>
+                            <div className="flex items-center gap-2">
+                                <Users size={16} className="text-purple-400" />
+                                <span className="text-gray-300">H3: Artist Tiers</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Messages */}
+                    <div className="flex-1 overflow-y-auto p-6" style={{maxHeight: 'calc(100vh - 400px)'}}>
+                        <div className="max-w-4xl mx-auto space-y-6">
+                            {messages.map((message, index) => (
+                                <div
+                                    key={index}
+                                    className={`flex gap-4 ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                                >
+                                    {message.role === 'assistant' && (
+                                        <div className="bg-green-500 rounded-full p-2 h-10 w-10 flex items-center justify-center flex-shrink-0">
+                                            <Music size={20} />
+                                        </div>
+                                    )}
+                                    <div
+                                        className={`rounded-2xl px-6 py-4 max-w-2xl ${
+                                            message.role === 'user'
+                                                ? 'bg-green-600 text-white'
+                                                : 'bg-gray-900 text-gray-100'
+                                        }`}
+                                    >
+                                        <div className="whitespace-pre-wrap">
+                                            {message.content.split('\n').map((line, i) => {
+                                                if (line.includes('**')) {
+                                                    const parts = line.split('**');
+                                                    return (
+                                                        <p key={i} className="mb-2">
+                                                            {parts.map((part, j) => 
+                                                                j % 2 === 1 ? <strong key={j}>{part}</strong> : part
+                                                            )}
+                                                        </p>
+                                                    );
+                                                }
+                                                if (line.trim().startsWith('•') || line.trim().startsWith('-')) {
+                                                    return <li key={i} className="ml-4 mb-1">{line.replace(/^[•-]\s*/, '')}</li>;
+                                                }
+                                                return line.trim() ? <p key={i} className="mb-2">{line}</p> : <br key={i} />;
+                                            })}
+                                        </div>
+                                    </div>
+                                    {message.role === 'user' && (
+                                        <div className="bg-green-700 rounded-full p-2 h-10 w-10 flex items-center justify-center flex-shrink-0">
+                                            <Users size={20} />
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
+                            
+                            {isLoading && (
+                                <div className="flex gap-4 justify-start">
+                                    <div className="bg-green-500 rounded-full p-2 h-10 w-10 flex items-center justify-center flex-shrink-0">
+                                        <Music size={20} />
+                                    </div>
+                                    <div className="bg-gray-900 rounded-2xl px-6 py-4">
+                                        <div className="flex items-center gap-2 text-gray-400">
+                                            <Loader2 className="animate-spin" size={20} />
+                                            <span>Analyzing your tracks...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+                            <div ref={messagesEndRef} />
+                        </div>
+                    </div>
+
+                    {/* Quick Prompts */}
+                    <div className="px-6 pb-4">
+                        <div className="max-w-4xl mx-auto">
+                            <p className="text-gray-400 text-sm mb-3">Quick Start:</p>
+                            <div className="flex gap-3 flex-wrap">
+                                {quickPrompts.map((prompt, index) => (
+                                    <button
+                                        key={index}
+                                        onClick={() => handleSendMessage(prompt.type)}
+                                        className="flex items-center gap-2 bg-gray-900 hover:bg-gray-800 border border-gray-700 rounded-full px-4 py-2 text-sm transition-colors"
+                                    >
+                                        <prompt.icon size={16} className="text-green-400" />
+                                        {prompt.text}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Track Selector */}
+                    {showTrackSelector && (
+                        <div className="px-6 pb-4">
+                            <div className="max-w-4xl mx-auto bg-gray-900 rounded-xl p-4 border border-gray-700">
+                                <div className="flex justify-between items-center mb-3">
+                                    <p className="text-sm font-semibold">Select up to 3 tracks from Bryan Adams' album:</p>
+                                    <button
+                                        onClick={() => setShowTrackSelector(false)}
+                                        className="text-gray-400 hover:text-white text-sm"
+                                    >
+                                        Close
+                                    </button>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                                    {sampleTracks.map(track => (
+                                        <button
+                                            key={track.id}
+                                            onClick={() => toggleTrack(track)}
+                                            disabled={!selectedTracks.find(t => t.id === track.id) && selectedTracks.length >= 3}
+                                            className={`flex items-center justify-between p-3 rounded-lg border transition-all ${
+                                                selectedTracks.find(t => t.id === track.id)
+                                                    ? 'bg-green-600 border-green-500'
+                                                    : 'bg-gray-800 border-gray-700 hover:border-gray-600'
+                                            } ${!selectedTracks.find(t => t.id === track.id) && selectedTracks.length >= 3 ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                        >
+                                            <div className="text-left">
+                                                <div className="font-semibold text-sm">{track.name}</div>
+                                                <div className="text-xs text-gray-400">Position {track.position} • Pop. {track.popularity}</div>
+                                            </div>
+                                            {selectedTracks.find(t => t.id === track.id) && (
+                                                <Zap size={16} className="text-yellow-400" />
+                                            )}
+                                        </button>
+                                    ))}
+                                </div>
+                                <p className="text-xs text-gray-400 mt-3">
+                                    {selectedTracks.length}/3 tracks selected
+                                </p>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Input Area */}
+                    <div className="bg-gray-900 border-t border-gray-800 p-6">
+                        <div className="max-w-4xl mx-auto">
+                            <div className="flex gap-3 flex-wrap md:flex-nowrap">
+                                <button
+                                    onClick={() => setShowTrackSelector(!showTrackSelector)}
+                                    className="bg-gray-800 hover:bg-gray-700 rounded-full px-4 py-3 transition-colors flex items-center gap-2 text-sm"
+                                >
+                                    <Music size={18} />
+                                    {selectedTracks.length > 0 ? `${selectedTracks.length} Tracks` : 'Select Tracks'}
+                                </button>
+                                <div className="flex-1 relative w-full">
+                                    <textarea
+                                        value={input}
+                                        onChange={(e) => setInput(e.target.value)}
+                                        onKeyPress={handleKeyPress}
+                                        placeholder="Or type your own question..."
+                                        className="w-full bg-gray-800 text-white rounded-3xl px-6 py-3 pr-14 focus:outline-none focus:ring-2 focus:ring-green-500 resize-none"
+                                        rows="1"
+                                        style={{ minHeight: '48px', maxHeight: '120px' }}
+                                    />
+                                    <button
+                                        onClick={() => handleSendMessage('general')}
+                                        disabled={isLoading || (!input.trim() && selectedTracks.length === 0)}
+                                        className="absolute right-3 top-1/2 -translate-y-1/2 bg-green-500 hover:bg-green-600 disabled:bg-gray-700 disabled:cursor-not-allowed rounded-full p-2 transition-colors"
+                                    >
+                                        <Send size={18} />
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Footer */}
+                    <div className="bg-black border-t border-gray-800 py-4">
+                        <div className="max-w-4xl mx-auto px-6 text-center">
+                            <p className="text-gray-500 text-xs">
+                                Team Member Responsible: <span className="text-green-400 font-semibold">Srinidhi Jagannathan</span>
+                            </p>
+                            <p className="text-gray-600 text-xs mt-1">
+                                Santa Clara University - MSBA Program • December 2024
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            );
+        };
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<PostReleaseOptimizer />);
+    </script>
+</body>
+</html>
