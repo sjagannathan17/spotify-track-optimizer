@@ -122,7 +122,7 @@ A two-part product:
 |------|------------|
 | `final-jupyter-notebook.ipynb` | Complete statistical analysis (188 K tracks, 5 findings) |
 | `post-release-optimizer-DEMO-FINAL.html` | Standalone AI chatbot — open in any browser |
-| `Post Release Optimizer README.pdf` | Technical documentation |
+| `docs/technical-writeup.pdf` | Technical documentation |
 
 **Try the chatbot:** Download `post-release-optimizer-DEMO-FINAL.html` and open in your browser.
 
