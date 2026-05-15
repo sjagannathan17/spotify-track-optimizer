@@ -6,7 +6,7 @@
 
 ---
 
-## 🎯 The Problem
+## The Problem
 
 A song's *position* on an album materially affects how listeners experience it — but most independent and emerging artists sequence albums by gut feel. The major-label playbook (front-load the hits, save the deep cuts for tracks 7–10) is folklore, not data.
 
@@ -19,7 +19,7 @@ The two pains:
 
 ---
 
-## 👥 Users & Jobs-to-be-Done
+## Users & Jobs-to-be-Done
 
 | User | Job-to-be-Done | Today's Workaround | Pain |
 |------|----------------|--------------------|------|
@@ -29,7 +29,7 @@ The two pains:
 
 ---
 
-## 💡 The Solution
+## The Solution
 
 A two-part product:
 1. **Statistical analysis** of 188K tracks → 5 actionable findings about what predicts post-release album performance
@@ -56,7 +56,7 @@ A two-part product:
 
 ---
 
-## 📊 Impact & Metrics
+## Impact & Metrics
 
 | Metric | Result |
 |--------|--------|
@@ -68,7 +68,7 @@ A two-part product:
 
 ---
 
-## 🛣️ What I'd Build Next
+## What I'd Build Next
 
 | Priority | Feature | Why this, why now |
 |----------|---------|-------------------|
@@ -81,24 +81,24 @@ A two-part product:
 
 ---
 
-## 👤 My Role
+## My Role
 
 **Group project** for the MSBA program at Santa Clara University.
 
 **What I personally owned:**
-- ✅ Hypothesis design — framed the *positions × audio features* model
-- ✅ The Quality Gap analysis (the headline finding)
-- ✅ Translating the regression coefficients into a user-facing chatbot prompt
-- ✅ Slide narrative
+- Hypothesis design — framed the *positions × audio features* model
+- The Quality Gap analysis (the headline finding)
+- Translating the regression coefficients into a user-facing chatbot prompt
+- Slide narrative
 
 **What teammates owned:**
-- 🤝 Initial data acquisition + cleaning
-- 🤝 Other regression specifications
-- 🤝 React chatbot frontend
+- Initial data acquisition + cleaning
+- Other regression specifications
+- React chatbot frontend
 
 ---
 
-## 🧠 What I Learned
+## What I Learned
 
 - **Findings → product is the hard step.** Running regressions is straightforward; turning a coefficient ("R²=0.42 on quality gap") into a user-facing recommendation ("space your bangers 10–20 quality points apart") is the actual product work.
 - **Genre and artist tier are interaction effects, not categories.** Lumping everyone into one model was tempting and wrong. The biggest unlock came from *splitting*, not from a fancier model.
@@ -106,7 +106,7 @@ A two-part product:
 
 ---
 
-## 🔧 Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |-------|------------|
@@ -116,7 +116,7 @@ A two-part product:
 
 ---
 
-## 📁 Files
+## Files
 
 | File | What it is |
 |------|------------|
