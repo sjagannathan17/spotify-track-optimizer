@@ -102,7 +102,7 @@ A two-part product:
 
 - **Findings → product is the hard step.** Running regressions is straightforward; turning a coefficient ("R²=0.42 on quality gap") into a user-facing recommendation ("space your bangers 10–20 quality points apart") is the actual product work.
 - **Genre and artist tier are interaction effects, not categories.** Lumping everyone into one model was tempting and wrong. The biggest unlock came from *splitting*, not from a fancier model.
-- **Standalone HTML demos beat full stacks for show-and-tell.** Zero setup, opens anywhere, works on a phone. For a portfolio piece, this is much higher reach than a localhost-only React app.
+- **Standalone HTML demos beat full stacks for show-and-tell.** Zero setup, opens anywhere, works on a phone. It's also far higher reach than a localhost-only React app.
 
 ---
 
